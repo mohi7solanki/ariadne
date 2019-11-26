@@ -1,13 +1,10 @@
-from ariadne import PathMap
+from ariadne import Map
 
-m = PathMap()
-m['a.b.c'] = 10
-print(m.a.b.c)
-print(m.a)
-m.a.__delitem__('b.c')
-del m.a.b.c
-del m.a
-print(m)
+x = Map()
+y = Map({'a':{'b':1}})
+
+x.b.c = 10
+print(y.a)
 
 #p1 = PathMap()
 #p1['a'] = 1

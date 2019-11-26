@@ -1,6 +1,5 @@
 __all__ = [
-    'PathMap', 
-    'PathMapMutable'
+    'Map'
 ]
 
-from .PathMap import PathMap
+from .Map import Map
