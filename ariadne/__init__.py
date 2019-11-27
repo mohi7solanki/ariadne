@@ -4,4 +4,4 @@ __all__ = [
 ]
 
 from .Map import Map
-from .Splitter import Splitter
+from .Splitter import *
