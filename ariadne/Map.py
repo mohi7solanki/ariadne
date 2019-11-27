@@ -12,14 +12,19 @@ SPECIAL_KEYS = ['_internal_map', '_splitter']
 
 class Map(MutableMapping, metaclass=ABCMeta):
 
-    def __init__(self, source=None, splitter=RegexSplitter()):
-        self._internal_map = source or defaultdict(lambda: None)
-        if not isinstance(splitter, BaseSplitter):
-            raise TypeError('The splitter must be of BaseSplitter type')
+    def __init__(self, source=None, splitter=RegexSplitter(), createdonaccess=False):
+        if not callable(splitter):
+            raise TypeError('The splitter must be callable')
         self._splitter = splitter
+        self._internal_map = source or dict()
+        self._createdonaccess = createdonaccess
 
     def __getattr__(self, path):
-        return self.__getitem__(path)
+        try:
+            return self.__getitem__(path)
+        except KeyError:
+            self._internal_map[path] = Map(splitter=self._splitter, createdonaccess=True)
+            return self.__getattr__(path)
 
     def __getitem__(self, path):
         l, r = self._split_and_splice(path)
@@ -53,7 +58,7 @@ class Map(MutableMapping, metaclass=ABCMeta):
         return self.map.__len__()
 
     def _split_and_splice(self, path):
-        l, r = self._splitter.split(path)
+        l, r = self._splitter(path)
         self._splice(l)
         return l, r
 

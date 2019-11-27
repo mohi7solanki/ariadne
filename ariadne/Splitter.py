@@ -10,11 +10,19 @@ class BaseSplitter(object):
         self.splitter = splitter 
 
     def split(self, string):
-        pos = self.split_pos(string)
-        return (string[:pos], string[pos+1:]) if pos else (string, None)
+        range_pair = self.range(string)
+        return self._split(range_pair, string) if range_pair else (string, None)
+
+    def _split(self, range_pair, string):
+        start, end = range_pair
+        length = end - start
+        return string[:start], string[start+length:]
+    
+    def __call__(self, string):
+        return self.split(string)
 
     @abstractmethod
-    def split_pos(self, string):
+    def range(self, string):
         pass
 
 class RegexSplitter(BaseSplitter):
@@ -22,18 +30,20 @@ class RegexSplitter(BaseSplitter):
     def __init__(self, splitter=DEFAULT_REGEX_PATH_DELIMITER):
         super().__init__(splitter)
 
-    def split_pos(self, string):
+    def range(self, string):
         match = self.splitter.search(string)
         if match:
-            pos = match.start()
-            return pos
+            start = match.start()
+            end = match.end()
+            return start, end
 
 class StringSplitter(BaseSplitter):
 
     def __init__(self, splitter=DEFAULT_STRING_PATH_DELIMITER):
         super().__init__(splitter)
 
-    def split_pos(self, string):
-        pos = string.find(self.splitter)
-        if pos != -1:
-            return pos
+    def range(self, string):
+        start = string.find(self.splitter)
+        if start != -1:
+            end = start + len(self.splitter)
+            return start, end
