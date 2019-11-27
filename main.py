@@ -1,15 +1,14 @@
 from ariadne import Map
 
-x = Map()
-y = Map({'a':{'b':1}})
+m = Map()
+m['a.b.c'] = 10
+m.a.b.c = 20
+m.a.b.d = 30
+m.a.z = 15
 
-x.b.c = 10
-print(y.a)
-
-#p1 = PathMap()
-#p1['a'] = 1
-#p2 = PathMap()
-#p2['b'] = 2
-
-
-
+#print(m.a.z)
+#print(m['a'].b['c'])
+#print(m.a['b'].c)
+#print(m['a.b.c'])
+#print(m['a.b/d'])
+#m.a.z.d = 45
