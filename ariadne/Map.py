@@ -8,7 +8,7 @@ try:
 except ImportError:
     pass
 
-SPECIAL_KEYS = ['_internal_map', '_splitter']
+SPECIAL_KEYS = ['_internal_map', '_splitter', '_createdonaccess']
 
 class Map(MutableMapping, metaclass=ABCMeta):
 
@@ -16,8 +16,18 @@ class Map(MutableMapping, metaclass=ABCMeta):
         if not callable(splitter):
             raise TypeError('The splitter must be callable')
         self._splitter = splitter
-        self._internal_map = source or dict()
         self._createdonaccess = createdonaccess
+        self._internal_map = self._process_source(source)
+
+    def to_dict(self):
+        pass
+
+    def _process_source(self, source):
+        if not source:
+            return dict()
+        if not isinstance(source, Mapping):
+            raise TypeError("source argument must be None or a Mapping type")
+        return source
 
     def __getattr__(self, path):
         try:
@@ -38,10 +48,13 @@ class Map(MutableMapping, metaclass=ABCMeta):
 
     def __setitem__(self, path, value):
         l, r = self._split_and_splice(path)
+        
         if r:
             temp = Map(splitter=self._splitter)
             temp[r] = value
             value = temp
+
+        self._createdonaccess = False
         self._internal_map[l] = value
 
     def __delattr__(self, path):
@@ -55,7 +68,7 @@ class Map(MutableMapping, metaclass=ABCMeta):
         return self._internal_map.__iter__()
 
     def __len__(self):
-        return self.map.__len__()
+        return self._internal_map.__len__()
 
     def _split_and_splice(self, path):
         l, r = self._splitter(path)

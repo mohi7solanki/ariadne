@@ -48,5 +48,31 @@ class TestMap(unittest.TestCase):
         m['a.b'] = 'value'
         self.assertEqual(m.a.b, 'value')
 
+    # from dict
+
+    def testFromDict(self):
+        m = M(
+        {
+            'a':10,
+            'b':20,
+            'c':{
+                'd':{
+                    'e':30,
+                    'f': {
+                        'g':3
+                        }
+                    }
+                }
+        })
+
+        #self.assertEqual(m['a'], 10)
+        #self.assertEqual(m['b'], 20)
+        #self.assertEqual(m['c.d.e'], 30)
+        self.assertEqual(m['c.d.f.g'], 3)
+
+        #self.assertEqual(m.a, 10)
+        #self.assertEqual(m['a'], 10)
+        self.assertEqual(m.c.d.f.g, 3)
+
 if __name__ == '__main__':
     unittest.main()
