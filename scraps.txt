@@ -1,0 +1,80 @@
+from abc import ABCMeta, abstractmethod
+from collections.abc import 
+
+SPECIAL_KEYS = ['__internal_structure__', '__splitter__', '__createdonaccess__']
+
+typemap = {
+    type(Mapping) : Map,
+    type(M)
+}
+
+class Ariadne(Mapping, metaclass=ABCMeta):
+
+    def __init__(self, source, splitter, createdonaccess):
+        if not callable(splitter):
+            raise TypeError('The splitter must be callable')
+        
+        self.__splitter__ = splitter
+        self.__createdonaccess__ = createdonaccess
+        self.__internal_structure__ = self.__process_source__(source)
+
+    @abstractmethod
+    def __process_source__(self, source):
+        pass
+
+    @abstractmethod
+    def __setitem__type__(self):
+        pass
+
+    def __getitem__(self, path):
+        l, r = self._split_and_splice(path)
+        return self.__internal_structure__[l][r] if r else self.__internal_structure__[l]
+
+    def __setitem__(self, path, value):
+        l, r = self._split_and_splice(path)
+        
+        if r:
+            temp = __setitem__type__()(source=None, splitter=self.__splitter__, createdonaccess=False)
+            temp[r] = value
+            value = temp
+
+        self.__createdonaccess__ = False
+        self.__internal_structure__[l] = value
+
+    def __delitem__(self, path):
+        left, right = self._split_and_splice(path)
+        if right:
+            self.__internal_structure__[left].__delitem__(right)
+        else:
+            self.__internal_structure__.__delitem__(left)
+
+    def __iter__(self):
+        return self.__internal_structure__.__iter__()
+
+    def __len__(self):
+        return self.__internal_structure__.__len__()
+
+    def _split_and_splice(self, path):
+        left, right = self.__splitter__(path)
+        self.__splicer__(self.__internal_structure__, left, self.__splitter__, self.__splicer__)
+        return left, right
+
+
+
+
+from collections.abc import Callable, Mapping, Sequence
+from .Map import Map
+
+class Splicer(Callable):
+
+    def splice(self, root, key, splitter):
+        if key in root.keys():
+            # Mapping and not spliced already
+            if isinstance(root[key], Mapping) and not isinstance(root[key], type(Map)):
+                root[key] = Map(root[key], splitter=splitter)
+            # List and not spliced already
+            #elif isinstance(root[key], Sequence) and not isinstance(root[key], type(List)):
+            #    root[key] = List(root[key], splitter=splitter)
+
+    def __call__(self, root, key, splitter):
+        self.splice(root, key, splitter)

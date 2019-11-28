@@ -1,7 +1,7 @@
 __all__ = [
-    'Map',
+    'Caja',
     'Splitter'
 ]
 
-from .Map import Map
+from .Caja import Caja
 from .Splitter import *
