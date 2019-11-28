@@ -12,7 +12,7 @@ SPECIAL_KEYS = ['_internal_structure_', '_splitter_', '_createdonaccess_']
 
 class Caja(MutableMapping, metaclass=ABCMeta):
 
-    InternalStructureTypes = ( Mapping, Sequence, type(None) )
+    __InternalStructureTypes__ = ( dict, list, type(None) )
 
     def __init__(self, source=None, splitter=RegexSplitter(), createdonaccess=False):
         if not callable(splitter):
@@ -28,8 +28,8 @@ class Caja(MutableMapping, metaclass=ABCMeta):
         #if isinstance(self._internal_structure_, )
 
     def __process_source__(self, source):
-        if not isinstance(source, self.InternalStructureTypes):
-            raise TypeError("source argument must be either, None, Mapping, or Sequence type")
+        if not isinstance(source, self.__InternalStructureTypes__):
+            raise TypeError("source argument must be either, None, dict, or list")
         
         return source if source else dict()
 
@@ -108,6 +108,6 @@ class Caja(MutableMapping, metaclass=ABCMeta):
         else:
             return
 
-        # if key is a mapping or sequence that has not been spliced, then splice it to guarantee recursion
-        if k in i and isinstance(root[k], (Mapping, list)) and not isinstance(root[k], type(self)):
+        # if under the key there is a source type, then splice it to guarantee recursion
+        if k in i and isinstance(root[k], self.__InternalStructureTypes__) and not isinstance(root[k], type(self)):
             root[k] = Caja(root[k], splitter=self._splitter_)
