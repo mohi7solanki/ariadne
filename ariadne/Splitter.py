@@ -10,8 +10,11 @@ class BaseSplitter(object):
         self.splitter = splitter 
 
     def split(self, string):
-        range_pair = self.range(string)
-        return self._split(range_pair, string) if range_pair else (string, None)
+        if isinstance(string, str):
+            range_pair = self.range(string)
+            if range_pair:
+                return self._split(range_pair, string)
+        return string, None
 
     def _split(self, range_pair, string):
         start, end = range_pair
