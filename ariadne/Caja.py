@@ -35,6 +35,7 @@ class Caja(MutableMapping, metaclass=ABCMeta):
 
 
     def __getattr__(self, path):
+        # if created on access and not 
         try:
             return self.__getitem__(path)
         except KeyError:
@@ -111,3 +112,9 @@ class Caja(MutableMapping, metaclass=ABCMeta):
         # if under the key there is a source type, then splice it to guarantee recursion
         if k in i and isinstance(root[k], self.__InternalStructureTypes__) and not isinstance(root[k], type(self)):
             root[k] = Caja(root[k], splitter=self._splitter_)
+
+    def __eq__(self, other):
+        return (type(self) == type(other) and self._internal_structure_ == other._internal_structure_) or (self._internal_structure_ == other)
+    
+    def __ne__(self, other):
+        return not self.__eq__(other)
