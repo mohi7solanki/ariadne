@@ -201,5 +201,18 @@ class UnitTestCajaStringRepresentationOperators(unittest.TestCase):
         self.assertEqual(m.__str__(), d.__str__())
         self.assertEqual(m.__repr__(), d.__repr__())
 
+class UnitTestCajaBoolConversion(unittest.TestCase):
+
+    def testUnitTestCajaBoolConversion(self):
+        d = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
+        m = Caja(d)
+        
+        self.assertTrue(m)
+        self.assertTrue(m.k1)
+        self.assertTrue(m.nested.a)
+
+        self.assertFalse(m.nested.c)
+        self.assertFalse(m.notexisting)
+
 if __name__ == '__main__':
     unittest.main()
