@@ -113,19 +113,26 @@ class Caja(MutableMapping, metaclass=ABCMeta):
         if k in i and isinstance(root[k], self.__InternalStructureTypes__) and not isinstance(root[k], type(self)):
             root[k] = Caja(root[k], splitter=self._splitter_)
 
+
     def __eq__(self, other):
         return (type(self) == type(other) and self._internal_structure_ == other._internal_structure_) or (self._internal_structure_ == other)
     
+
     def __ne__(self, other):
         return not self.__eq__(other)
+
 
     def __repr__(self):
         return self._internal_structure_.__repr__()
 
+
     def __str__(self):
         return self._internal_structure_.__str__()
+
 
     def __format__(self, format_spec):
         return self._internal_structure_.__format__(format_spec)
 
     
+    def __bool__(self):
+        return not self._createdonaccess_ and bool(self._internal_structure_)

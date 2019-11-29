@@ -155,11 +155,11 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
         self.assertNotEqual(m, Caja([1,2]))
 
     def testUnitTestCajaEqualityOperatorsSourceDict(self):
-        l = {'k1':'a', 'k2':'b'}
-        m = Caja(l)
-        n = Caja(l)
+        d = {'k1':'a', 'k2':'b'}
+        m = Caja(d)
+        n = Caja(d)
         
-        self.assertEqual(m, l)
+        self.assertEqual(m, d)
         self.assertEqual(m, {'k1':'a', 'k2':'b'})
         self.assertEqual(m, n)
 
@@ -167,11 +167,11 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
         self.assertNotEqual(m, Caja({'k3':'a', 'k2':'b'}))
 
     def testUnitTestCajaEqualityOperatorsSourceDictNested(self):
-        l = {'k1':'a', 'k2':'b', 'nested': {'a':'value_a'}}
-        m = Caja(l)
-        n = Caja(l)
+        d = {'k1':'a', 'k2':'b', 'nested': {'a':'value_a'}}
+        m = Caja(d)
+        n = Caja(d)
         
-        self.assertEqual(m, l)
+        self.assertEqual(m, d)
         self.assertEqual(m, {'k1':'a', 'k2':'b', 'nested': {'a':'value_a'}})
         self.assertEqual(m, n)
 
@@ -179,11 +179,11 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
         self.assertNotEqual(m, Caja({'k1':'a', 'k2':'b', 'nested': {'a':'value_b'}}))
 
     def testUnitTestCajaEqualityOperatorsSourceDictMixed(self):
-        l = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
-        m = Caja(l)
-        n = Caja(l)
+        d = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
+        m = Caja(d)
+        n = Caja(d)
         
-        self.assertEqual(m, l)
+        self.assertEqual(m, d)
         self.assertEqual(m, {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}})
         self.assertEqual(m['nested.a'], [1,2,3])
         self.assertEqual(m.nested.a, [1,2,3])
@@ -192,6 +192,14 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
         self.assertNotEqual(m, {'k1':'a', 'k2':'b', 'nested': {}})
         self.assertNotEqual(m, Caja({'k1':'a', 'k2':'b', 'nested': {'a':'value_b'}}))
 
+class UnitTestCajaStringRepresentationOperators(unittest.TestCase):
+
+    def testUnitTestCajaStringRepresentation(self):
+        d = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
+        m = Caja(d)
+        
+        self.assertEqual(m.__str__(), d.__str__())
+        self.assertEqual(m.__repr__(), d.__repr__())
 
 if __name__ == '__main__':
     unittest.main()
