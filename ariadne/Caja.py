@@ -118,3 +118,14 @@ class Caja(MutableMapping, metaclass=ABCMeta):
     
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def __repr__(self):
+        return self._internal_structure_.__repr__()
+
+    def __str__(self):
+        return self._internal_structure_.__str__()
+
+    def __format__(self, format_spec):
+        return self._internal_structure_.__format__(format_spec)
+
+    
