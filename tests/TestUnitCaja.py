@@ -140,6 +140,20 @@ class UnitTestCajaDictSource(unittest.TestCase):
         for (k,v) in m.items():
             self.assertEqual(d[k], v)
 
+class UnitTestCajaEqualityOperators(unittest.TestCase):
+
+    def testUnitTestCajaEqualityOperatorsSourceList(self):
+        l = [1,2,3]
+        m = Caja(l)
+        n = Caja(l)
+        
+        self.assertEqual(m, l)
+        self.assertEqual(m, [1,2,3])
+        self.assertEqual(m, n)
+
+        self.assertNotEqual(m, [1,2])
+        self.assertNotEqual(m, Caja([1,2]))
+
 
 if __name__ == '__main__':
     unittest.main()
