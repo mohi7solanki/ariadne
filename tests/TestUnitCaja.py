@@ -5,22 +5,22 @@ from ariadne import Caja
 
 class UnitTestCajaNoneSourceSingleLevel(unittest.TestCase):
 
-    def testSetOneLevelAttrAccessAttr(self):
+    def test_set_one_level_attr_access_attr(self):
         m = Caja()
         m.a = 'value'
         self.assertEqual(m.a, 'value')
 
-    def testSetOneLevelKeyAccessKey(self):
+    def test_set_one_level_key_access_key(self):
         m = Caja()
         m['a'] = 'value'
         self.assertEqual(m['a'], 'value')
 
-    def testSetOneLevelAttrAccessKey(self):
+    def test_set_one_level_attr_access_key(self):
         m = Caja()
         m.a = 'value'
         self.assertEqual(m['a'], 'value')
 
-    def testSetOneLevelKeyAccessAttr(self):
+    def test_set_one_level_key_access_attr(self):
         m = Caja()
         m['a'] = 'value'
         self.assertEqual(m.a, 'value')
@@ -28,22 +28,22 @@ class UnitTestCajaNoneSourceSingleLevel(unittest.TestCase):
 
 class UnitTestCajaNoneSourceMultipleLevel(unittest.TestCase):
 
-    def testSetMultipleLevelAttrAccessAttr(self):
+    def test_set_multiple_level_attr_access_attr(self):
         m = Caja()
         m.a.b = 'value'
         self.assertEqual(m.a.b, 'value')
 
-    def testSetMultipleLevelKeyAccessKey(self):
+    def test_set_multiple_level_key_access_key(self):
         m = Caja()
         m['a.b'] = 'value'
         self.assertEqual(m['a.b'], 'value')
 
-    def testSetMultipleLevelAttrAccessKey(self):
+    def test_set_multiple_level_attr_access_key(self):
         m = Caja()
         m.a.b = 'value'
         self.assertEqual(m['a.b'], 'value')
 
-    def testSetMultipleLevelKeyAccessAttr(self):
+    def test_set_multiple_level_key_access_attr(self):
         m = Caja()
         m['a.b'] = 'value'
         self.assertEqual(m.a.b, 'value')
@@ -51,27 +51,27 @@ class UnitTestCajaNoneSourceMultipleLevel(unittest.TestCase):
 
 class UnitTestCajaListSource(unittest.TestCase):
 
-    def testUnitTestCajaListSourceSimple(self):
+    def test_unit_test_caja_list_source_simple(self):
         m = Caja([0,1,2])
 
         self.assertEqual(m[0], 0)
         self.assertEqual(m['0'], 0)
 
-    def testUnitTestCajaListSourceNested(self):
+    def test_unit_test_caja_list_source_nested(self):
         m = Caja([[1,2],[3,4],[5],[]])
 
         self.assertEqual(m['1.0'], 3)
         self.assertEqual(m[0][0], 1)
         self.assertEqual(m['2/0'], 5)
 
-    def testUnitTestCajaListSourceNestedWithDict(self):
+    def test_unit_test_caja_list_source_nested_with_dict(self):
         m = Caja([[1,2],[3,4],[5],[{'a':[6,7]}]])
 
         self.assertEqual(m['1.0'], 3)
         self.assertEqual(m[0][0], 1)
         self.assertEqual(m['3/0.a.1'], 7)
 
-    def testUnitTestCajaListIterate(self):
+    def test_unit_test_caja_list_iterate(self):
         m = Caja([1,2,3,4,5])
 
         i = 1
@@ -82,7 +82,7 @@ class UnitTestCajaListSource(unittest.TestCase):
 
 class UnitTestCajaDictSource(unittest.TestCase):
     
-    def testUnitTestCajaDictSourceNoList(self):
+    def test_unit_test_caja_dict_source_no_list(self):
 
         m = Caja({
             'a': 'value_a',
@@ -106,7 +106,7 @@ class UnitTestCajaDictSource(unittest.TestCase):
         self.assertEqual(m.c.d.f.g, 'value_g')
         self.assertEqual(m['c'].d.f['g'], 'value_g')
 
-    def testUnitTestCajaDictSourceListOneLevel(self):
+    def test_unit_test_caja_dict_source_list_one_level(self):
 
         m = Caja({
             'a': 'value_a',
@@ -129,7 +129,7 @@ class UnitTestCajaDictSource(unittest.TestCase):
         self.assertEqual(m.c.d.e, 'value_e')
         self.assertEqual(m['c'].d.f['g']['1'], 2)
 
-    def testUnitTestCajaDictSourceIterateKeysOneLevel(self):
+    def test_unit_test_caja_dict_source_iterate_keys_one_level(self):
 
         d = {'a':1,'b':2,'c':3}
         m = Caja(d.copy())
@@ -142,7 +142,7 @@ class UnitTestCajaDictSource(unittest.TestCase):
 
 class UnitTestCajaEqualityOperators(unittest.TestCase):
 
-    def testUnitTestCajaEqualityOperatorsSourceList(self):
+    def test_unit_test_caja_equality_operators_source_list(self):
         l = [1,2,3]
         m = Caja(l.copy())
         n = Caja(l.copy())
@@ -154,7 +154,7 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
         self.assertNotEqual(m, [1,2])
         self.assertNotEqual(m, Caja([1,2]))
 
-    def testUnitTestCajaEqualityOperatorsSourceDict(self):
+    def test_unit_test_caja_equality_operators_source_dict(self):
         d = {'k1':'a', 'k2':'b'}
         m = Caja(d.copy())
         n = Caja(d.copy())
@@ -166,7 +166,7 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
         self.assertNotEqual(m, {'k1':'a', 'k2':'c'})
         self.assertNotEqual(m, Caja({'k3':'a', 'k2':'b'}))
 
-    def testUnitTestCajaEqualityOperatorsSourceDictNested(self):
+    def test_unit_test_caja_equality_operators_source_dict_nested(self):
         d = {'k1':'a', 'k2':'b', 'nested': {'a':'value_a'}}
         m = Caja(d)
         n = Caja(d)
@@ -178,7 +178,7 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
         self.assertNotEqual(m, {'k1':'a', 'k2':'b', 'nested': {}})
         self.assertNotEqual(m, Caja({'k1':'a', 'k2':'b', 'nested': {'a':'value_b'}}))
 
-    def testUnitTestCajaEqualityOperatorsSourceDictMixed(self):
+    def test_unit_test_caja_equality_operators_source_dict_mixed(self):
         d = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
         m = Caja(d.copy())
         n = Caja(d.copy())
@@ -194,7 +194,7 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
 
 class UnitTestCajaStringRepresentationOperators(unittest.TestCase):
 
-    def testUnitTestCajaStringRepresentation(self):
+    def test_unit_test_caja_string_representation(self):
         d = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
         m = Caja(d)
         
@@ -203,7 +203,7 @@ class UnitTestCajaStringRepresentationOperators(unittest.TestCase):
 
 class UnitTestCajaBoolConversion(unittest.TestCase):
 
-    def testUnitTestCajaBoolConversion(self):
+    def test_unit_test_caja_bool_conversion(self):
         d = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
         m = Caja(d)
         
@@ -216,7 +216,7 @@ class UnitTestCajaBoolConversion(unittest.TestCase):
 
 class UnitTestCajaRaw(unittest.TestCase):
 
-    def testUnitTestCajaRawSimple(self):
+    def test_unit_test_caja_raw_simple(self):
         din = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
         caja = Caja(din.copy())
         dout = caja.raw()
@@ -224,7 +224,7 @@ class UnitTestCajaRaw(unittest.TestCase):
         self.assertIsInstance(dout, type(din))
         self.assertEqual(dout, din)
 
-    def testUnitTestCajaRawWithCreatedOnAccess(self):
+    def test_unit_test_caja_raw_with_created_on_access(self):
         din = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
         caja = Caja(din.copy())
 

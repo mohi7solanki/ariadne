@@ -4,7 +4,7 @@ import re
 DEFAULT_REGEX_PATH_DELIMITER = re.compile(r'[\.-/]')
 DEFAULT_STRING_PATH_DELIMITER = '.'
 
-class BaseSplitter(object):
+class BaseSplitter():
 
     def __init__(self, splitter):
         self.splitter = splitter 
@@ -13,10 +13,11 @@ class BaseSplitter(object):
         if isinstance(string, str):
             range_pair = self.range(string)
             if range_pair:
-                return self._split(range_pair, string)
+                return BaseSplitter._split(range_pair, string)
         return string, None
 
-    def _split(self, range_pair, string):
+    @staticmethod
+    def _split(range_pair, string):
         start, end = range_pair
         length = end - start
         return string[:start], string[start+length:]

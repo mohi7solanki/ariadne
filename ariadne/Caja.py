@@ -1,7 +1,6 @@
 from abc import ABCMeta
-from collections import defaultdict
-from collections.abc import Mapping, MutableMapping, Sequence, MutableSequence
-from .Splitter import BaseSplitter, RegexSplitter
+from collections.abc import Mapping, MutableMapping
+from .Splitter import RegexSplitter
 
 try:
     import pyyaml
@@ -64,13 +63,13 @@ class Caja(MutableMapping, metaclass=ABCMeta):
     def __getitem__(self, path):
         left, right = self.__split_and_splice__(path)
 
-        if isinstance(self._internal_structure_, Sequence):
+        if isinstance(self._internal_structure_, list):
             left = int(left)
 
         if right:
             return self._internal_structure_[left][right]
-        else:
-            return self._internal_structure_[left]
+        
+        return self._internal_structure_[left]
 
 
     def __setattr__(self, path, value):
@@ -122,7 +121,7 @@ class Caja(MutableMapping, metaclass=ABCMeta):
         root = self._internal_structure_
         if isinstance(root, list):
             k, i = int(key), range(0, len(root))
-        elif isinstance(root, Mapping):
+        elif isinstance(root, dict):
             k, i = key, root.keys()
         else:
             return
