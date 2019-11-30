@@ -132,7 +132,7 @@ class UnitTestCajaDictSource(unittest.TestCase):
     def testUnitTestCajaDictSourceIterateKeysOneLevel(self):
 
         d = {'a':1,'b':2,'c':3}
-        m = Caja(d)
+        m = Caja(d.copy())
 
         for k in m:
             self.assertEqual(d[k], m[k])
@@ -144,8 +144,8 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
 
     def testUnitTestCajaEqualityOperatorsSourceList(self):
         l = [1,2,3]
-        m = Caja(l)
-        n = Caja(l)
+        m = Caja(l.copy())
+        n = Caja(l.copy())
         
         self.assertEqual(m, l)
         self.assertEqual(m, [1,2,3])
@@ -156,8 +156,8 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
 
     def testUnitTestCajaEqualityOperatorsSourceDict(self):
         d = {'k1':'a', 'k2':'b'}
-        m = Caja(d)
-        n = Caja(d)
+        m = Caja(d.copy())
+        n = Caja(d.copy())
         
         self.assertEqual(m, d)
         self.assertEqual(m, {'k1':'a', 'k2':'b'})
@@ -180,8 +180,8 @@ class UnitTestCajaEqualityOperators(unittest.TestCase):
 
     def testUnitTestCajaEqualityOperatorsSourceDictMixed(self):
         d = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
-        m = Caja(d)
-        n = Caja(d)
+        m = Caja(d.copy())
+        n = Caja(d.copy())
         
         self.assertEqual(m, d)
         self.assertEqual(m, {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}})
@@ -218,11 +218,23 @@ class UnitTestCajaRaw(unittest.TestCase):
 
     def testUnitTestCajaRawSimple(self):
         din = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
-        caja = Caja(din)
+        caja = Caja(din.copy())
         dout = caja.raw()
 
         self.assertIsInstance(dout, type(din))
         self.assertEqual(dout, din)
+
+    def testUnitTestCajaRawWithCreatedOnAccess(self):
+        din = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
+        caja = Caja(din.copy())
+
+        self.assertFalse(caja.nonexistantkey.subkey)
+        self.assertIsInstance(caja.raw(), type(din))
+        self.assertEqual(caja.raw(), din)
+        
+        caja.nonexistantkey.subkey = 'test'
+        self.assertEqual(caja.raw(), {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}, 'nonexistantkey':{'subkey':'test'}})
+
 
 if __name__ == '__main__':
     unittest.main()

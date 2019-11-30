@@ -37,11 +37,13 @@ class Caja(MutableMapping, metaclass=ABCMeta):
         # rebuild raw structure
         for k in ks:
             if isinstance(root[k], type(self)):
-                obj[k] = root[k].raw()
+                if not root[k]._createdonaccess_:
+                    obj[k] = root[k].raw()
             else:
                 obj[k] = root[k]
 
         return obj
+
 
     def __process_source__(self, source):
         if not isinstance(source, self.__InternalStructureTypes__):
