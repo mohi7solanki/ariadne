@@ -214,5 +214,15 @@ class UnitTestCajaBoolConversion(unittest.TestCase):
         self.assertFalse(m.nested.c)
         self.assertFalse(m.notexisting)
 
+class UnitTestCajaRaw(unittest.TestCase):
+
+    def testUnitTestCajaRawSimple(self):
+        din = {'k1':'a', 'k2':'b', 'nested': {'a':[1,2,3]}}
+        caja = Caja(din)
+        dout = caja.raw()
+
+        self.assertIsInstance(dout, type(din))
+        self.assertEqual(dout, din)
+
 if __name__ == '__main__':
     unittest.main()

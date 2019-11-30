@@ -24,8 +24,24 @@ class Caja(MutableMapping, metaclass=ABCMeta):
 
 
     def raw(self):
-        pass
-        #if isinstance(self._internal_structure_, )
+        
+        # prepare object and list of keys/indices
+        root = self._internal_structure_
+        if isinstance(root, dict):
+            ks = root.keys()
+            obj  = {}
+        elif isinstance(root, list):
+            ks = range(len(root))
+            obj  = []
+
+        # rebuild raw structure
+        for k in ks:
+            if isinstance(root[k], type(self)):
+                obj[k] = root[k].raw()
+            else:
+                obj[k] = root[k]
+
+        return obj
 
     def __process_source__(self, source):
         if not isinstance(source, self.__InternalStructureTypes__):
